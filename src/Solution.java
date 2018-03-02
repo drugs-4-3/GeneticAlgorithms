@@ -14,6 +14,10 @@ public class Solution {
     }
 
     public static Solution getRandomSolution(int dimension) {
+        return new Solution(getRandIntArr(dimension));
+    }
+
+    public static int[] getRandIntArr(int dimension) {
         int[] data = new int[dimension];
         int index = 0;
         while (index < dimension) {
@@ -23,7 +27,7 @@ public class Solution {
                 index++;
             }
         }
-        return new Solution(data);
+        return data;
     }
 
     private static boolean intArrayContains(int[] arr, int key, int pos) {
@@ -37,10 +41,6 @@ public class Solution {
 
     private static int getRandomInt(int min, int max) {
         return ThreadLocalRandom.current().nextInt(min, max + 1);
-
-
-//        Random r = new Random();
-//        return min + r.nextInt(max - min + 1);
     }
 
     public Solution(String fileName) {
