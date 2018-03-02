@@ -1,24 +1,40 @@
 public class RandomSearch {
 
     private Problem problem;
+    private int iterations;
+    private Solution solution;
 
-    public RandomSearch(Problem problem) {
+    public RandomSearch(Problem problem, int iterations) {
         this.problem = problem;
+        this.iterations = iterations;
+
+
+        // generating solution
+        solution = Solution.getRandomSolution(problem.getDimension());
+        Solution bestSolution = solution;
+        int bestFitness = problem.getFitness(solution);
+
+        for (int i = 0; i < iterations; i++) {
+            solution = Solution.getRandomSolution(problem.getDimension());
+            int fitness = problem.getFitness(solution);
+            if (fitness == -1) {
+                System.out.println("ERROR!!!");
+            }
+            if (fitness < bestFitness) {
+                bestFitness = fitness;
+                bestSolution = solution;
+            }
+            solution = bestSolution;
+        }
     }
 
     public Problem getProblem() {
         return problem;
     }
 
-    public Solution findSolution(int iterations) {
-
-        for (int i = 0; i < iterations; i++) {
-
-        }
-
-
-        // some example value
-        return new Solution(new int[5]);
+    public Solution getSolution()
+    {
+        return this.solution;
     }
 
 }
