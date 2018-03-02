@@ -80,7 +80,7 @@ public class Problem {
 
 
 
-    public int getFitness(Solution s) throws Exception {
+    public int getFitness(Solution s) {
         int dim = s.getDimension();
         int[] data = s.getData();
         int result = 0;
@@ -96,7 +96,7 @@ public class Problem {
             return result;
         }
         else {
-            throw new Exception("Dimension of problem is different than dimension of solution");
+            return -1;
         }
     }
 
@@ -104,8 +104,8 @@ public class Problem {
 
 //        System.out.println(new File(".").getAbsoluteFile());
 
-        Problem problem = new Problem("problem.txt");
-        Solution solution = new Solution("solution.txt");
+        Problem problem = new Problem("problems/problem.txt");
+        Solution solution = new Solution("solutions/solution.txt");
 
         int[][] dist = problem.getDistance();
         int[][] flow = problem.getFlow();

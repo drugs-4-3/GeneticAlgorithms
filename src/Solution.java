@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class Solution {
@@ -8,6 +10,37 @@ public class Solution {
 
     public Solution(int[] data) {
         this.data = data;
+        this.dimension = data.length;
+    }
+
+    public static Solution getRandomSolution(int dimension) {
+        int[] data = new int[dimension];
+        int index = 0;
+        while (index < dimension) {
+            int rand = getRandomInt(1, dimension);
+            data[index] = rand;
+            if (!intArrayContains(data, rand, index)) {
+                index++;
+            }
+        }
+        return new Solution(data);
+    }
+
+    private static boolean intArrayContains(int[] arr, int key, int pos) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == key && i != pos) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static int getRandomInt(int min, int max) {
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
+
+
+//        Random r = new Random();
+//        return min + r.nextInt(max - min + 1);
     }
 
     public Solution(String fileName) {
@@ -51,4 +84,5 @@ public class Solution {
     public int getDimension() {
         return dimension;
     }
+
 }
