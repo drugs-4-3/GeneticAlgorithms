@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,13 +22,27 @@ public class Solution {
         int[] data = new int[dimension];
         int index = 0;
         while (index < dimension) {
-            int rand = getRandomInt(1, dimension);
+            int rand = MyRandom.getRandomInt(1, dimension);
             data[index] = rand;
             if (!intArrayContains(data, rand, index)) {
                 index++;
             }
         }
         return data;
+    }
+
+    private int[] swap(int[] data, int index1, int index2) {
+
+        // copy array
+        int[] result = new int[data.length];
+        for (int i = 0; i < data.length; i++) {
+            result[i] = data[i];
+        }
+
+        int temp = data[index1];
+        result[index1] = data[index2];
+        result[index2] = temp;
+        return result;
     }
 
     private static boolean intArrayContains(int[] arr, int key, int pos) {
@@ -39,7 +54,19 @@ public class Solution {
         return false;
     }
 
-    private static int getRandomInt(int min, int max) {
+    /**
+     * Returns pseudo random integer from range [min, max] (inclusive)
+     *
+     * @param min
+     * @param max
+     * @return
+     */
+    public static int getRandomInt(int min, int max) {
+        if (max < min) {
+            int temp = min;
+            min = max;
+            max = temp;
+        }
         return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
@@ -77,12 +104,40 @@ public class Solution {
         }
     }
 
+    public void mutate() {
+        int rand1 = MyRandom.getRandomInt(0, dimension - 1);
+        int rand2 = MyRandom.getRandomInt(0, dimension - 1);
+        // two different positions
+        while (rand1 == rand2) {
+            rand2 = MyRandom.getRandomInt(0, dimension - 1);
+        }
+        this.data = swap(data, rand1, rand2);
+    }
+
     public int[] getData() {
         return data;
     }
 
     public int getDimension() {
         return dimension;
+    }
+
+    public void reapir() {
+
+        // find missing values
+        LinkedList<Integer> list = new LinkedList<>();
+        for (int i = 1; i <= dimension; i++) {
+            if (!intArrayContains(data, i, -1)) {
+                list.add(i);
+            }
+        }
+
+        // insert missing values instead of duplicates
+        for (int i = 0; i < dimension; i++) {
+            if (intArrayContains(data, data[i], i)) {
+                data[i] = list.pop();
+            }
+        }
     }
 
 }

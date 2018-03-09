@@ -48,6 +48,13 @@ public class Greedy {
         }
     }
 
+    /**
+     * this is somehow broken - but no time to fix it just now
+     *
+     * @param p
+     * @param iterations
+     * @param better
+     */
     public Greedy(Problem p, int iterations, boolean better) {
         this.problem = p;
         this.iterations = iterations;
@@ -102,6 +109,11 @@ public class Greedy {
     }
 
     private static int getRandomInt(int min, int max) {
+        if (max < min) {
+            int temp = min;
+            min = max;
+            max = temp;
+        }
         return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
@@ -112,6 +124,17 @@ public class Greedy {
     public Solution getSolution()
     {
         return this.solution;
+    }
+
+    public String getResultString() {
+        StringBuffer result = new StringBuffer();
+        result.append("GREEDY SOLUTION: \n");
+        for(int i = 0; i < getProblem().getDimension(); i++) {
+            result.append(getSolution().getData()[i] + " ");
+        }
+        result.append("\n ");
+        result.append("GREEDY SOLUTION FITNESS: " + getProblem().getFitness(getSolution()));
+        return result.toString();
     }
 
 }

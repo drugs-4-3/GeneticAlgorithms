@@ -1,0 +1,17 @@
+todo:
+
+- poprawna struktura obiektowa klas: dziedziczenie, wyciaganie wspolnych metod
+- sprawdzanie poprawnych wartosci przekazywanych do konstruktora
+- ale jednoczesnie nie wyrzucanie wyjatkow w konstruktorze - jak zrobic?
+- nie wykonywanie logiki algorytmu w konstruktorze ale w osobnej metodzie - konstruktor tylko inicjuje obiekt
+- przepisanie kodu na cpp
+
+
+
+- krzyzowanie w performRouletteSelection
+- funkcja - compare fitness - niezalezna implementacja jesli fitness lepszy jet wiekszy lub mniejszy
+- nie liczyc fitness za kazdym razem od nowa - zapisywac gdzies to
+
+
+
+

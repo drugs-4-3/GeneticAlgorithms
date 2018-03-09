@@ -37,4 +37,14 @@ public class RandomSearch {
         return this.solution;
     }
 
+    public String getResultString() {
+        StringBuilder result = new StringBuilder();
+        result.append("RANDOM SOLUTION: \n");
+        for(int i = 0; i < getProblem().getDimension(); i++) {
+            result.append(getSolution().getData()[i] + " ");
+        }
+        result.append("\n ");
+        result.append("RANDOM SOLUTION FITNESS: " + getProblem().getFitness(getSolution()));
+        return result.toString();
+    }
 }

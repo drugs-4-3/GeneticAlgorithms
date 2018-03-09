@@ -4,61 +4,50 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        int dim = 5;
-//        int [] rand = Solution.getRandIntArr(dim);
-//        int[] rand2 = Greedy.swap(rand, getRandomInt(0, dim - 1), getRandomInt(0, dim - 1));
-//
-//        for (int i = 0; i < dim; i++) {
-//            System.out.printf(rand[i] + " ");
-//        }
-//        System.out.printf("\n\n");
-//        for (int i = 0; i < dim; i++) {
-//            System.out.printf(rand2[i] + " ");
-//        }
-
         System.out.println("Checking for optimal solution");
         System.out.println("Using random search:");
 
-        int iterations = 50;
-        int iterations2 = 10;
+        int iterations = 200;
 
         Problem p = new Problem("problems/problem.txt");
+
+
         RandomSearch rs= new RandomSearch(p, iterations);
         Solution randS = rs.getSolution();
 
-        //Greedy greedy = new Greedy(p, iterations); // greedy from random solution
+//        Greedy greedy = new Greedy(p, iterations); // greedy from random solution
         Greedy greedy = new Greedy(p, randS, iterations); // gready optimizing previously found solution
         Solution greedySol = greedy.getSolution();
 
         // improved greeedy
-        Greedy greedyImp = new Greedy(p, iterations2, true); // gready optimizing previously found solution
-        Solution greedySolImp = greedyImp.getSolution();
+//        Greedy greedyImp = new Greedy(p, iterations2, true); // gready optimizing previously found solution
+//        Solution greedySolImp = greedyImp.getSolution();
+
+
+        int pop_size = 200;
+        int ga_iter = 200;
+        long t1 = System.currentTimeMillis();
+        GeneticAlgorithm ga = new GeneticAlgorithm(p, ga_iter, pop_size, 1, GeneticAlgorithm.SELECTION_ROULETTE);
+        long t2 = System.currentTimeMillis();
+        long time_exec = t2 - t1;
 
 
         System.out.printf("FINISHED! \n\n");
 
-        System.out.printf("RANDOM SOLUTION: \n");
-        for(int i = 0; i < p.getDimension(); i++) {
-            System.out.printf(randS.getData()[i] + " ");
-        }
-        System.out.printf("\n");
-        System.out.printf("RANDOM SOLUTION FITNESS: " + p.getFitness(randS));
-
+        System.out.printf(rs.getResultString());
         System.out.printf("\n\n");
 
-        System.out.printf("GREEDY SOLUTION: \n");
-        for(int i = 0; i < p.getDimension(); i++) {
-            System.out.printf(greedySol.getData()[i] + " ");
-        }
-        System.out.printf("\n");
-        System.out.printf("GREEDY SOLUTION FITNESS: " + p.getFitness(greedySol));
+        System.out.printf(greedy.getResultString());
+        System.out.printf("\n\n");
 
-        System.out.printf("GREEDY IMPROVED SOLUTION: \n");
-        for(int i = 0; i < p.getDimension(); i++) {
-            System.out.printf(greedySolImp.getData()[i] + " ");
-        }
-        System.out.printf("\n");
-        System.out.printf("GREEDY IMPROVED SOLUTION FITNESS: " + p.getFitness(greedySolImp));
+
+        System.out.printf(ga.getResultString());
+        System.out.printf("\n\n");
+
+        System.out.printf("Genetic algorithm execution took " + time_exec + " miliseconds. \n");
+
+//        System.out.printf(greedyImp.getResultString());
+
     }
 
     private static int getRandomInt(int min, int max) {
