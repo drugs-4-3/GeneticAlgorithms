@@ -28,6 +28,9 @@ public class GeneticAlgorithm {
         for (int i = 0; i < iterations; i++) {
             population = performRouletteSelection(population);
             population = mutatePopulation(population);
+            int best_fitness = getBestFitness();
+            int cache_size = problem.cache.size();
+            System.out.println("Iteration: " + i + ", best_fitness: " + best_fitness + ", cache_size: " + cache_size);
         }
 
         int best_index = 0;
@@ -132,5 +135,16 @@ public class GeneticAlgorithm {
         result.append("\n ");
         result.append("GENETIC ALGORITHM SOLUTION FITNESS: " + getProblem().getFitness(getSolution()));
         return result.toString();
+    }
+
+    private int getBestFitness() {
+        int best_fitness = problem.getFitness(population[0]);
+        for (int i = 1; i < pop_size; i++) {
+            int current_fitness = problem.getFitness(population[i]);
+            if (best_fitness > current_fitness) {
+                best_fitness = current_fitness;
+            }
+        }
+        return best_fitness;
     }
 }

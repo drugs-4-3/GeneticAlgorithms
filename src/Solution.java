@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -8,6 +9,8 @@ public class Solution {
 
     private int[] data;
     private int dimension;
+    private int hash;
+    private boolean is_set_hash = false;
 
     public Solution(int[] data) {
         this.data = data;
@@ -138,6 +141,14 @@ public class Solution {
                 data[i] = list.pop();
             }
         }
+    }
+
+    public int getHash() {
+        if (!is_set_hash) {
+            this.hash = Arrays.hashCode(data);
+            is_set_hash = true;
+        }
+        return this.hash;
     }
 
 }

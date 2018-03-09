@@ -1,10 +1,14 @@
 import java.io.*;
+import java.util.HashMap;
 
 public class Problem {
 
     private int dimension;
     private int[][] flow;
     private int[][] distance;
+    public HashMap<int[], Integer> cache = new HashMap<int[], Integer>();
+
+    public int double_seen = 0;
 
     public Problem(int dim, int[][] flow, int[][] dist) {
 
@@ -81,22 +85,30 @@ public class Problem {
 
 
     public int getFitness(Solution s) {
-        int dim = s.getDimension();
-        int[] data = s.getData();
-        int result = 0;
-        if (dim == this.dimension) {
-            for (int i = 0; i < dim; i++) {
-                // apply int j = 0 and results will be as in http://anjos.mgi.polymtl.ca/qaplib/inst.html#HRW
-                for (int j = i+1; j < dim; j++) {
-                    int val1 = data[i] - 1;
-                    int val2 = data[j] - 1;
-                    result += distance[i][j]*flow[val1][val2];
+
+        if (!cache.containsKey(s.getData())) {
+            int dim = s.getDimension();
+            int[] data = s.getData();
+            int fitness = 0;
+            if (dim == this.dimension) {
+                for (int i = 0; i < dim; i++) {
+                    // apply int j = 0 and results will be as in http://anjos.mgi.polymtl.ca/qaplib/inst.html#HRW
+                    for (int j = i+1; j < dim; j++) {
+                        int val1 = data[i] - 1;
+                        int val2 = data[j] - 1;
+                        fitness += distance[i][j]*flow[val1][val2];
+                    }
                 }
+                cache.put(s.getData().clone(), fitness);
             }
-            return result;
+            else {
+                fitness = -1;
+            }
+            return fitness;
         }
         else {
-            return -1;
+            double_seen++;
+            return cache.get(s.getData());
         }
     }
 

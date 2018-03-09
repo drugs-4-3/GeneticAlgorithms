@@ -46,6 +46,9 @@ public class Main {
 
         System.out.printf("Genetic algorithm execution took " + time_exec + " miliseconds. \n");
 
+        System.out.printf("\n\nCache size: " + p.cache.size());
+        System.out.printf("\nDouble seen genotypes: " + p.double_seen + "\n\n");
+
 //        System.out.printf(greedyImp.getResultString());
 
     }
