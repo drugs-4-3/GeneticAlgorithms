@@ -6,7 +6,7 @@ public class Problem {
     private int dimension;
     private int[][] flow;
     private int[][] distance;
-    public HashMap<int[], Integer> cache = new HashMap<int[], Integer>();
+    public HashMap<String, Integer> cache = new HashMap<String, Integer>();
 
     public int double_seen = 0;
 
@@ -86,7 +86,7 @@ public class Problem {
 
     public int getFitness(Solution s) {
 
-        if (!cache.containsKey(s.getData())) {
+        if (!cache.containsKey(s.getHash())) {
             int dim = s.getDimension();
             int[] data = s.getData();
             int fitness = 0;
@@ -99,7 +99,7 @@ public class Problem {
                         fitness += distance[i][j]*flow[val1][val2];
                     }
                 }
-                cache.put(s.getData().clone(), fitness);
+                cache.put(s.getHash(), fitness);
             }
             else {
                 fitness = -1;
@@ -108,7 +108,7 @@ public class Problem {
         }
         else {
             double_seen++;
-            return cache.get(s.getData());
+            return cache.get(s.getHash());
         }
     }
 

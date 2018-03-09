@@ -9,7 +9,7 @@ public class Solution {
 
     private int[] data;
     private int dimension;
-    private int hash;
+    private String hash;
     private boolean is_set_hash = false;
 
     public Solution(int[] data) {
@@ -143,9 +143,9 @@ public class Solution {
         }
     }
 
-    public int getHash() {
+    public String getHash() {
         if (!is_set_hash) {
-            this.hash = Arrays.hashCode(data);
+            this.hash = Arrays.toString(data);
             is_set_hash = true;
         }
         return this.hash;

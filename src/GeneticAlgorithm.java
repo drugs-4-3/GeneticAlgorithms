@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class GeneticAlgorithm {
@@ -24,14 +27,39 @@ public class GeneticAlgorithm {
         this.selection_type = selection_type;
         this.mutation_percentage = mutation_percentage;
 
-        population = generateRandomPopulation();
-        for (int i = 0; i < iterations; i++) {
-            population = performRouletteSelection(population);
-            population = mutatePopulation(population);
-            int best_fitness = getBestFitness();
-            int cache_size = problem.cache.size();
-            System.out.println("Iteration: " + i + ", best_fitness: " + best_fitness + ", cache_size: " + cache_size);
+        BufferedWriter writer1 = null;
+        BufferedWriter writer2;
+
+        try {
+            writer1 = new BufferedWriter(new FileWriter("csv1.csv"));
+            writer2 = new BufferedWriter(new FileWriter("csv2.csv"));
+
+            population = generateRandomPopulation();
+            for (int i = 0; i < iterations; i++) {
+                population = performRouletteSelection(population);
+                population = mutatePopulation(population);
+                int best_fitness = getBestFitness();
+                int cache_size = problem.cache.size();
+
+                writer1.write(i + ";" + best_fitness + "\n");
+                writer2.write(i + ";" + cache_size + "\n");
+//                System.out.println("Iteration: " + i + ", best_fitness: " + best_fitness + ", cache_size: " + cache_size);
+            }
+            writer1.close();
+            writer2.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+//        population = generateRandomPopulation();
+//        for (int i = 0; i < iterations; i++) {
+//            population = performRouletteSelection(population);
+//            population = mutatePopulation(population);
+//            int best_fitness = getBestFitness();
+//            int cache_size = problem.cache.size();
+//            System.out.println("Iteration: " + i + ", best_fitness: " + best_fitness + ", cache_size: " + cache_size);
+//        }
 
         int best_index = 0;
         int best_fitness = problem.getFitness(population[best_index]);
