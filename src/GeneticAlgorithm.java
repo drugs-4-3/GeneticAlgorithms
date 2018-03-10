@@ -17,15 +17,17 @@ public class GeneticAlgorithm {
     private int selection_type;
     private int multiplier = 1000; // arbitrary
     private int mutation_percentage;
+    private int crossOverPropability;
     private Solution[] population;
 
 
-    public GeneticAlgorithm(Problem problem, int iterations, int pop_size, int mutation_percentage, int selection_type) {
+    public GeneticAlgorithm(Problem problem, int iterations, int pop_size, int mutation_percentage, int selection_type, int cop) {
         this.problem = problem;
         this.iterations = iterations;
         this.pop_size = pop_size;
         this.selection_type = selection_type;
         this.mutation_percentage = mutation_percentage;
+        this.crossOverPropability = cop;
 
         BufferedWriter writer1 = null;
         BufferedWriter writer2;
@@ -121,18 +123,25 @@ public class GeneticAlgorithm {
     }
 
     private Solution combineSolutions(Solution parent1, Solution parent2) {
-        int dim = parent1.getDimension();
-        int border = MyRandom.getRandomInt(0, dim - 1);
-        int[] child_data = new int[dim];
-        for (int i = 0; i < border; i++) {
-            child_data[i] = parent1.getData()[i];
+
+        int rand = MyRandom.getRandomInt(0, 99);
+        if (rand < crossOverPropability) {
+            int dim = parent1.getDimension();
+            int border = MyRandom.getRandomInt(0, dim - 1);
+            int[] child_data = new int[dim];
+            for (int i = 0; i < border; i++) {
+                child_data[i] = parent1.getData()[i];
+            }
+            for (int i = border; i < dim; i++) {
+                child_data[i] = parent2.getData()[i];
+            }
+            Solution result = new Solution(child_data);
+            result.reapir();
+            return result;
         }
-        for (int i = border; i < dim; i++) {
-            child_data[i] = parent2.getData()[i];
+        else {
+            return new Solution(parent1.getData().clone());
         }
-        Solution result = new Solution(child_data);
-        result.reapir();
-        return result;
     }
 
     private Solution[] mutatePopulation(Solution[] solutions) {
