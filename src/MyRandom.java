@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class MyRandom {
 
-    private static Random random = new Random(123123123);
+    private static Random random = new Random(123123125);
 
 
     public static int getRandomInt(int min, int max) {

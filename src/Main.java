@@ -12,12 +12,12 @@ public class Main {
         Problem p = new Problem("problems/problem.txt");
 
 
-        RandomSearch rs= new RandomSearch(p, iterations);
-        Solution randS = rs.getSolution();
-
-//        Greedy greedy = new Greedy(p, iterations); // greedy from random solution
-        Greedy greedy = new Greedy(p, randS, iterations); // gready optimizing previously found solution
-        Solution greedySol = greedy.getSolution();
+//        RandomSearch rs= new RandomSearch(p, iterations);
+//        Solution randS = rs.getSolution();
+//
+////        Greedy greedy = new Greedy(p, iterations); // greedy from random solution
+//        Greedy greedy = new Greedy(p, randS, iterations); // gready optimizing previously found solution
+//        Solution greedySol = greedy.getSolution();
 
         // improved greeedy
 //        Greedy greedyImp = new Greedy(p, iterations2, true); // gready optimizing previously found solution
@@ -25,21 +25,21 @@ public class Main {
 
 
         int pop_size = 200;
-        int ga_iter = 1000;
+        int ga_iter = 150;
         int cop = 10;
         long t1 = System.currentTimeMillis();
-        GeneticAlgorithm ga = new GeneticAlgorithm(p, ga_iter, pop_size, 5, GeneticAlgorithm.SELECTION_ROULETTE, cop);
+        GeneticAlgorithm ga = new GeneticAlgorithm(p, ga_iter, pop_size, 1, GeneticAlgorithm.SELECTION_ROULETTE, cop);
         long t2 = System.currentTimeMillis();
         long time_exec = t2 - t1;
 
 
         System.out.printf("FINISHED! \n\n");
 
-        System.out.printf(rs.getResultString());
-        System.out.printf("\n\n");
-
-        System.out.printf(greedy.getResultString());
-        System.out.printf("\n\n");
+//        System.out.printf(rs.getResultString());
+//        System.out.printf("\n\n");
+//
+//        System.out.printf(greedy.getResultString());
+//        System.out.printf("\n\n");
 
 
         System.out.printf(ga.getResultString());

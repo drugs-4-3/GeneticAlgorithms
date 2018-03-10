@@ -31,37 +31,39 @@ public class GeneticAlgorithm {
 
         BufferedWriter writer1 = null;
         BufferedWriter writer2;
+        BufferedWriter writer3;
 
         try {
             writer1 = new BufferedWriter(new FileWriter("csv1.csv"));
             writer2 = new BufferedWriter(new FileWriter("csv2.csv"));
+            writer3 = new BufferedWriter(new FileWriter("csv3.csv"));
 
             population = generateRandomPopulation();
             for (int i = 0; i < iterations; i++) {
+                if (i%20 == 0) {
+                    System.out.println(i);
+                }
                 population = performRouletteSelection(population);
                 population = mutatePopulation(population);
                 int best_fitness = getBestFitness();
                 int cache_size = problem.cache.size();
+                int medium_fitness = countMediumFitness() - 826;
 
-                writer1.write(i + ";" + best_fitness + "\n");
+//                if (i%100 == 0) {
+//                    writer1.write(i + ";" + (best_fitness - 826) + "\n");
+//                }
+                writer1.write(i + ";" + (best_fitness - 826) + "\n");
                 writer2.write(i + ";" + cache_size + "\n");
+                writer3.write(i + ";" + medium_fitness + "\n");
 //                System.out.println("Iteration: " + i + ", best_fitness: " + best_fitness + ", cache_size: " + cache_size);
             }
             writer1.close();
             writer2.close();
+            writer3.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        population = generateRandomPopulation();
-//        for (int i = 0; i < iterations; i++) {
-//            population = performRouletteSelection(population);
-//            population = mutatePopulation(population);
-//            int best_fitness = getBestFitness();
-//            int cache_size = problem.cache.size();
-//            System.out.println("Iteration: " + i + ", best_fitness: " + best_fitness + ", cache_size: " + cache_size);
-//        }
 
         int best_index = 0;
         int best_fitness = problem.getFitness(population[best_index]);
@@ -105,7 +107,10 @@ public class GeneticAlgorithm {
             if (problem.getFitness(s) == 0) {
                 System.out.println("tutaj");
             }
-            int times_appearing = (multiplier*100/problem.getFitness(s));
+            int fitness = problem.getFitness(s);
+            fitness = fitness - 800 ; // subtract optimal fitness
+            double ratio = 1.0/(double)((fitness*fitness) + 1.0);
+            int times_appearing = (int)(10000.0*ratio);
             for (int i = 0; i < times_appearing; i++) {
                 pool.add(s);
             }
@@ -183,5 +188,13 @@ public class GeneticAlgorithm {
             }
         }
         return best_fitness;
+    }
+
+    private int countMediumFitness() {
+        int sum = 0;
+        for (int i = 0; i < pop_size; i++) {
+            sum += problem.getFitness(population[i]);
+        }
+        return (int) ((double)(sum)/(double)(pop_size));
     }
 }

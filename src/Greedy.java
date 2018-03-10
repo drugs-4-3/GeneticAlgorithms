@@ -95,7 +95,6 @@ public class Greedy {
 
     public static  int[] swap(int[] data, int index1, int index2) {
 
-
         // copy array
         int[] result = new int[data.length];
         for (int i = 0; i < data.length; i++) {
