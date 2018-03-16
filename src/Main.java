@@ -25,7 +25,7 @@ public class Main {
 
 
         int pop_size = 200;
-        int ga_iter = 150;
+        int ga_iter = 400;
         int cop = 10;
         long t1 = System.currentTimeMillis();
         GeneticAlgorithm ga = new GeneticAlgorithm(p, ga_iter, pop_size, 1, GeneticAlgorithm.SELECTION_ROULETTE, cop);

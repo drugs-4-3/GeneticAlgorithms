@@ -5,8 +5,8 @@ import java.util.LinkedList;
 
 public class GeneticAlgorithm {
 
-    public static int SELECTION_ROULETTE = 1;
-    public static int SELECTION_TOURNAMENT = 2;
+    public static final int SELECTION_ROULETTE = 1;
+    public static final int SELECTION_TOURNAMENT = 2;
 
 
     private Problem problem;
@@ -19,6 +19,7 @@ public class GeneticAlgorithm {
     private int mutation_percentage;
     private int crossOverPropability;
     private Solution[] population;
+    private int cur_best_fit = -1;
 
 
     public GeneticAlgorithm(Problem problem, int iterations, int pop_size, int mutation_percentage, int selection_type, int cop) {
@@ -43,7 +44,8 @@ public class GeneticAlgorithm {
                 if (i%20 == 0) {
                     System.out.println(i);
                 }
-                population = performRouletteSelection(population);
+
+                population = performSelection(population);
                 population = mutatePopulation(population);
                 int best_fitness = getBestFitness();
                 int cache_size = problem.cache.size();
@@ -91,11 +93,26 @@ public class GeneticAlgorithm {
 
     private Solution[] performSelection(Solution[] solutions) {
 
-        if (this.selection_type == SELECTION_ROULETTE) {
-            return performRouletteSelection(solutions);
-        } else  {
-            return performRouletteSelection(solutions);
+        switch (this.selection_type) {
+            case SELECTION_ROULETTE:
+                return performRouletteSelection(solutions);
+            case SELECTION_TOURNAMENT:
+                return performTournamentSelection(solutions);
+            default:
+                return performRouletteSelection(solutions);
         }
+    }
+
+    private int getBestFitness(Solution[] solutions) {
+        int best = problem.getFitness(solutions[0]);
+
+        for (int i= 0; i < pop_size; i++) {
+            int fit = problem.getFitness(solutions[i]);
+            if (fit < best) {
+                best = fit;
+            }
+        }
+        return best;
     }
 
     private Solution[] performRouletteSelection(Solution[] solutions) {
@@ -103,18 +120,32 @@ public class GeneticAlgorithm {
         LinkedList<Solution> pool = new LinkedList<>();
         Solution[] result = new Solution[pop_size];
 
+//        if (cur_best_fit == -1) {
+//            cur_best_fit = getBestFitness(solutions);
+//        }
+//        int bestfit = cur_best_fit;
+
+
+//        cur_best_fit = 820;
         for (Solution s: solutions) {
-            if (problem.getFitness(s) == 0) {
-                System.out.println("tutaj");
-            }
+
             int fitness = problem.getFitness(s);
-            fitness = fitness - 800 ; // subtract optimal fitness
+
+//            if (bestfit < cur_best_fit) {
+//                bestfit = fitness;
+//            }(
+
+//            fitness = fitness - cur_best_fit; // subtract optimal fitness
+
             double ratio = 1.0/(double)((fitness*fitness) + 1.0);
-            int times_appearing = (int)(10000.0*ratio);
+            int times_appearing = (int)(100000000.0*ratio);
             for (int i = 0; i < times_appearing; i++) {
                 pool.add(s);
             }
         }
+
+//        cur_best_fit = bestfit;
+
         int length = pool.size();
 
         for (int i = 0; i < pop_size; i++) {
@@ -125,6 +156,29 @@ public class GeneticAlgorithm {
             result[i] = combineSolutions(parent1, parent2);
         }
         return result;
+    }
+
+    private Solution[] performTournamentSelection(Solution[] solutions) {
+
+        Solution[] newGeneration = new Solution[pop_size];
+        for (int i = 0; i < pop_size; i++) {
+            Solution s1 = getSolutionByTournament(pop_size/40);
+            Solution s2 = getSolutionByTournament(pop_size/40);
+            newGeneration[i] = combineSolutions(s1, s2);
+        }
+        return newGeneration;
+    }
+
+    private Solution getSolutionByTournament(int iterations) {
+
+        Solution bestSolution = population[MyRandom.getRandomInt(0, pop_size - 1)];
+        for (int i = 1; i < iterations; i++) {
+            int random = MyRandom.getRandomInt(0, pop_size - 1);
+            if (problem.getFitness(population[random]) < problem.getFitness(bestSolution)) {
+                bestSolution = population[random];
+            }
+        }
+        return bestSolution;
     }
 
     private Solution combineSolutions(Solution parent1, Solution parent2) {
